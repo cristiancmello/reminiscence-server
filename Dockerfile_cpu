@@ -1,4 +1,4 @@
-FROM $TENSORFLOW_CONTAINER_NAME_CPU
+FROM gcr.io/tensorflow/tensorflow
 
 RUN echo -n | openssl s_client -connect get.docker.io:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | tee '/usr/local/share/ca-certificates/get_docker_io.crt'
 
