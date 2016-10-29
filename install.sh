@@ -42,7 +42,6 @@ function install-or-start-server
 	fi
 }
 
-eval $DOCKER_INSTALLER
 install-or-start-server $1 $2
 
 
