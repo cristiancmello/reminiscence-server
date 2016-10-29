@@ -19,15 +19,15 @@ sudo apt-get install -y docker-engine
 sudo usermod -aG docker $HOST_USER
 
 echo "DOCKER instalado com sucesso!"
-echo -e "\nSerá necessário fazer logout deste usuário.\n\n"
+echo -e "\n\nSerá necessário fazer logout deste usuário.\n"
 
-#read -p "Deseja fazer logout? " -n 1 -r
-#echo
+read -p "Deseja fazer logout [Y:yes]? AVISO! Salve todos os seus arquivos antes da confirmação. " -n 1 -r
+echo
 
-#if [[ ! $REPLY =~ ^[Yy]$ ]]
-#then
-#    exit 1
-#fi
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+then
+    exit 1
+fi
 
 # Fazer logout
-#pkill -KILL -u $HOST_USER
+pkill -KILL -u $HOST_USER
