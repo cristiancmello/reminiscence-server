@@ -21,6 +21,6 @@ sudo ./rem # Instala ou Inicia o servidor com suporte somente para CPU.
 ```
 
 ```bash
-sudo ./rem $ Instala ou Inicia o servidor com suporte a GPU NVIDIA.
+sudo ./rem # Instala ou Inicia o servidor com suporte a GPU NVIDIA.
 ```
 
