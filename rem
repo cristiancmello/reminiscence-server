@@ -11,9 +11,10 @@ function server-install-msg-error
 
 function server-install-or-start-help
 {
-	echo -e "Uso: rem [--cpu [--build | --bash] | --gpu [--build | --bash] | --help]"
+	echo -e "Uso: rem [--cpu [--build | --bash] | --gpu [--build | --bash] | --help | --sf]"
 	echo -e "Opções:"
 	echo -e "\t--help\t\tMostra informações de ajuda."
+	echo -e "\t--sf\t\tPermite que o usuário HOST consiga ler/escrever/executar na pasta compartilhada."
 	echo -e "\t--cpu\t\tInstala/Inicia servidor com suporte somente para CPU."
 	echo -e "\t--gpu\t\tInstala/Inicia servidor com suporte a GPU.\n"
 	echo -e "Exemplos:"
