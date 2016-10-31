@@ -21,6 +21,7 @@ CONTAINER_PORT=8888
 REM_INSTALL_START_ARG_HELP="--help"
 TENSORFLOW_SERVER_ARG1_GPU="--gpu"
 TENSORFLOW_SERVER_ARG1_CPU="--cpu"
+TENSORFLOW_SERVER_ARG1_SF="--sf"	# SF = SHAREDFOLDER
 TENSORFLOW_SERVER_ARG2_BUILD="--build"
 TENSORFLOW_SERVER_ARG2_BASH="--bash"
 TENSORFLOW_SERVER_URL_GPU=gcr.io/tensorflow/tensorflow:latest-gpu
@@ -36,6 +37,7 @@ DOCKER_INSTALLER="./docker-install.sh "
 NVIDIA_DOCKER_INSTALLER="./nvidiadocker-install.sh "
 TENSORFLOW_START_SERVER="./tensorflow-start-server.sh "
 TENSORFLOW_BUILD="./tensorflow-build-dockerfile.sh "
+TENSORFLOW_SF_USR="./tensorflow-sharedfolder-chown-user.sh "
 DOCKER_EXEC_BASH="./tensorflow-bash-start.sh "
 
 SERVER_MSG_ERROR="Argumentos inválidos."

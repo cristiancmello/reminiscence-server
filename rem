@@ -23,6 +23,11 @@ function server-install-or-start-help
 	echo -e "\trem --gpu --bash\tExecuta um terminal (TTY) para interagir com o servidor."
 }
 
+function server-install-or-start-sf
+{
+	eval $TENSORFLOW_SF_USR
+}
+
 function server-install-or-start-gpu
 {
 	# Instale o nvidia-docker caso o utilitário não esteja instalado.
@@ -47,6 +52,7 @@ function server-exec-bash
 {
 	eval $DOCKER_EXEC_BASH
 }
+
 
 function funcs_arg_2
 {
@@ -75,7 +81,21 @@ function reminiscence
 	
 	case "$1" in
 		$REM_INSTALL_START_ARG_HELP)
+			if [[ !(-z "${2+set}") ]]; then
+				server-install-msg-error
+				exit 1
+			fi
+			
 			server-install-or-start-help
+			;;
+			
+		$TENSORFLOW_SERVER_ARG1_SF)
+			if [[ !(-z "${2+set}") ]]; then
+				server-install-msg-error
+				exit 1
+			fi
+		
+			server-install-or-start-sf
 			;;
 			
 		$TENSORFLOW_SERVER_ARG1_GPU)
