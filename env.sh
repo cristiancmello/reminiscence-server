@@ -18,6 +18,7 @@ HOST_PORT=8888
 # Porta padrão do container
 CONTAINER_PORT=8888
 
+REM_INSTALL_START_ARG_HELP="--help"
 TENSORFLOW_SERVER_ARG1_GPU="--gpu"
 TENSORFLOW_SERVER_ARG1_CPU="--cpu"
 TENSORFLOW_SERVER_URL_GPU=gcr.io/tensorflow/tensorflow:latest-gpu
