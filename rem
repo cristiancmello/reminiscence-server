@@ -11,14 +11,16 @@ function server-install-msg-error
 
 function server-install-or-start-help
 {
-	echo -e "Uso: rem [--cpu | --gpu | --help]"
+	echo -e "Uso: rem [--cpu [--build | --bash] | --gpu [--build | --bash] | --help]"
 	echo -e "Opções:"
 	echo -e "\t--help\t\tMostra informações de ajuda."
 	echo -e "\t--cpu\t\tInstala/Inicia servidor com suporte somente para CPU."
 	echo -e "\t--gpu\t\tInstala/Inicia servidor com suporte a GPU.\n"
 	echo -e "Exemplos:"
-	echo -e "\trem\t\tInstala ou Inicia o servidor do Reminiscence para CPU, somente (padrão)."
-	echo -e "\trem --gpu\tInstala ou Inicia o servidor do Reminescence com suporte a GPU NVIDIA."
+	echo -e "\trem --cpu\t\tInstala ou Inicia o servidor do Reminiscence para CPU, somente."
+	echo -e "\trem --gpu\t\tInstala ou Inicia o servidor do Reminescence com suporte a GPU NVIDIA."
+	echo -e "\trem --gpu --build\tConstrói o servidor novamente a partir do arquivo Dockerfile_gpu."
+	echo -e "\trem --gpu --bash\tExecuta um terminal (TTY) para interagir com o servidor."
 }
 
 function server-install-or-start-gpu
@@ -36,30 +38,61 @@ function server-install-or-start-cpu
 	eval $TENSORFLOW_START_SERVER $1 $2
 }
 
-# Função para construir servidor a partir de um Dockerfile
-function install-or-start-server
+function server-build
 {
-	# Se o segundo argumento tiver algo escrito, pare o script.
-	if [[ !(-z "${2+set}") ]]; then
-		server-install-msg-error
-		exit
-	fi
-	
-	if [[ "$1" == $REM_INSTALL_START_ARG_HELP ]]; then
-		server-install-or-start-help
-		exit
-	elif [[ "$1" == $TENSORFLOW_SERVER_ARG1_GPU ]]; then
-		server-install-or-start-gpu $1 $2
-	elif [[ "$1" == $TENSORFLOW_SERVER_ARG1_CPU ]]; then
-		server-install-or-start-cpu $1 $2
-	else
-		if [[ !(-z "${1+set}") ]]; then
-			server-install-msg-error
-			exit
-		fi
-		
-		server-install-or-start-cpu $1 $2
-	fi
+	eval $TENSORFLOW_BUILD $1 $2
 }
 
-install-or-start-server $1 $2
+function server-exec-bash
+{
+	eval $DOCKER_EXEC_BASH
+}
+
+function funcs_arg_2
+{
+	ARG_2=$3
+	
+	case "$2" in
+		$TENSORFLOW_SERVER_ARG2_BUILD)
+			server-build $1 $ARG_2
+			exit 0
+			;;
+			
+		$TENSORFLOW_SERVER_ARG2_BASH)
+			server-exec-bash
+			exit 0
+			;;
+	esac
+}
+
+function reminiscence
+{
+	# Se o terceiro argumento tiver algo escrito, pare o script.
+	if [[ !(-z "${3+set}") ]]; then
+		server-install-msg-error
+		exit 1
+	fi
+	
+	case "$1" in
+		$REM_INSTALL_START_ARG_HELP)
+			server-install-or-start-help
+			;;
+			
+		$TENSORFLOW_SERVER_ARG1_GPU)
+			funcs_arg_2 $1 $2 $3
+			server-install-or-start-gpu $1 $2
+			;;
+			
+		$TENSORFLOW_SERVER_ARG1_CPU)
+			funcs_arg_2 $1 $2 $3
+			server-install-or-start-cpu $1 $2
+			;;
+			
+		*)
+			server-install-or-start-help
+			exit 1
+	esac
+}
+
+reminiscence $1 $2 $3
+
