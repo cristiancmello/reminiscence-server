@@ -13,16 +13,19 @@ function server-install-or-start-help
 	echo -e "Uso: rem [--cpu | --gpu | --help]"
 	echo -e "Opções:"
 	echo -e "\t--help\t\tMostra informações de ajuda."
-	echo -e "\t--cpu\t\t Instala/Inicia servidor com suporte somente para CPU."
-	echo -e "\t--gpu\t\t Instala/Inicia servidor com suporte a GPU.\n"
+	echo -e "\t--cpu\t\tInstala/Inicia servidor com suporte somente para CPU."
+	echo -e "\t--gpu\t\tInstala/Inicia servidor com suporte a GPU.\n"
 	echo -e "Exemplos:"
-	echo -e "\trem\t\t Instala ou Inicia o servidor do Reminiscence para CPU, somente (padrão)."
-	echo -e "\trem --gpu\t\t Instala ou Inicia o servidor do Reminescence com suporte a GPU NVIDIA."
+	echo -e "\trem\t\tInstala ou Inicia o servidor do Reminiscence para CPU, somente (padrão)."
+	echo -e "\trem --gpu\tInstala ou Inicia o servidor do Reminescence com suporte a GPU NVIDIA."
 }
 
 function server-install-or-start-gpu
 {
-	eval $NVIDIA_DOCKER_INSTALLER
+	if ! type "nvidia-docker" > /dev/null; then
+		eval $NVIDIA_DOCKER_INSTALLER
+	fi
+	
 	eval $TENSORFLOW_START_SERVER $1 $2
 }
 

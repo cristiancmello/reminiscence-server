@@ -17,5 +17,10 @@ sudo ./docker-install.sh
 A seguir, o comando possibilitará a instalação automática de algumas dependências e inicia o servidor.
 
 ```bash
-sudo ./install.sh
+sudo ./rem # Instala ou Inicia o servidor com suporte somente para CPU.
 ```
+
+```bash
+sudo ./rem $ Instala ou Inicia o servidor com suporte a GPU NVIDIA.
+```
+
