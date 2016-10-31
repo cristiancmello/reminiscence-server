@@ -1,5 +1,6 @@
 #!/bin/bash
-# args: $1 = [--gpu | --cpu]
+# rem
+# Script de install/start do Reminiscence.
 
 source env.sh
 
@@ -22,6 +23,7 @@ function server-install-or-start-help
 
 function server-install-or-start-gpu
 {
+	# Instale o nvidia-docker caso o utilitário não esteja instalado.
 	if ! type "nvidia-docker" > /dev/null; then
 		eval $NVIDIA_DOCKER_INSTALLER
 	fi
