@@ -33,3 +33,6 @@ sudo ./rem --gpu # Instala ou Inicia o servidor com suporte a GPU NVIDIA.
 ```
 
 Após a primeira instalação ou inicialização, não é mais preciso utilizar privilégio de superuser para executar o Reminiscence.
+
+## Encerramento da Execução do Reminiscence
+Para encerrar o servidor do Reminiscence, você pode pressionar `<CTRL+C>` no terminal onde o script de inicialização foi executado.
