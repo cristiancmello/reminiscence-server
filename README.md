@@ -1,5 +1,5 @@
 # Reminiscence Server
-Um servidor para reconhecimento de dígitos manuscritos.
+Um servidor como ambiente de software para aplicações de Machine Learning.
 
 ## Requisitos
 - Sistema Operacional Ubuntu 16.04 LTS (Xenial Xerus);
