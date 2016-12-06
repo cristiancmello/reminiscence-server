@@ -1,0 +1,36 @@
+
+
+
+
+
+/*
+     FILE ARCHIVED ON 2:51:19 abr 5, 2016 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 15:03:42 nov 2, 2016.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+#grav-login {
+    max-width: 30rem;
+    margin: 5rem auto;
+    background: #fcfcfc;
+    border: 4px solid #eee;
+    border-radius: 4px;
+    padding: 1rem 3rem 3rem 3rem;
+    text-align: center;
+}
+
+#grav-login .form-actions {
+    text-align: center;
+}
+
+#grav-logout {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+.alert.info {
+    color: #c00;
+}

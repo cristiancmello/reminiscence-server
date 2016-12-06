@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<!-- saved from url=(0089)https://web.archive.org/web/20160306005243/http://openmachin.es/blog/tensorflow-mnist-nod -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+<div class="fit-vids-style" id="fit-vids-style" style="display: none;">­<style>.fluid-width-video-wrapper{width:100%;position:relative;padding:0;}.fluid-width-video-wrapper iframe,.fluid-width-video-wrapper object,.fluid-width-video-wrapper embed {position:absolute;top:0;left:0;width:100%;height:100%;}</style></div><script type="text/javascript" async="" defer="" src="https://analytics.wikunia.de/piwik.js"></script><script type="text/javascript" src="./Recognize your handwritten numbers_files/analytics.js"></script>
+<script type="text/javascript">archive_analytics.values.server_name="wwwb-app16.us.archive.org";archive_analytics.values.server_ms=1219;</script>
+<link type="text/css" rel="stylesheet" href="./Recognize your handwritten numbers_files/banner-styles.css">
+
+
+    
+    <!-- (1) Optimize for mobile versions: /web/20160306005243/http://goo.gl/EOpFl -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- (1) force latest IE rendering engine: bit.ly/1c8EiC9 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Recognize your handwritten numbers</title>
+    <meta name="description" content="About Brackets, Machine Learning and more">
+
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+        <meta name="generator" content="GravCMS 0.9.42">
+        <meta name="description" content="]OpenMachines[ is a blog about Brackets, Machine Learning and more">
+    
+    <link rel="canonical" href="https://web.archive.org/blog/tensorflow-mnist-nod">
+    <link rel="shortcut icon" href="https://web.archive.org/web/20160306005243im_/http://openmachin.es/user/themes/mediator/images/favicon.png">
+    <link rel="stylesheet" href="./Recognize your handwritten numbers_files/Open+Sans-400,400i,700,700i">
+    <link href="./Recognize your handwritten numbers_files/font-awesome.min.css" rel="stylesheet">
+
+
+                    <link href="./Recognize your handwritten numbers_files/default.css" type="text/css" rel="stylesheet">
+<link href="./Recognize your handwritten numbers_files/mathjax.css" type="text/css" rel="stylesheet">
+<link href="./Recognize your handwritten numbers_files/login.css" type="text/css" rel="stylesheet">
+<link href="./Recognize your handwritten numbers_files/main.css" type="text/css" rel="stylesheet">
+<link href="./Recognize your handwritten numbers_files/table.css" type="text/css" rel="stylesheet">
+
+<script type="text/javascript" async="" src="./Recognize your handwritten numbers_files/embed.js"></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+<body itemscope="" itemtype="http://schema.org/Article"><div id="MathJax_Message" style="display: none;"></div><div id="wm-ipp" lang="en" style="display: block;">
+
+<div style="position:fixed;left:0;top:0;width:100%!important">
+<div id="wm-ipp-inside">
+   <table style="width:100%;"><tbody><tr>
+   <td id="wm-logo">
+       <a href="https://web.archive.org/web/" title="Wayback Machine home page"><img src="./Recognize your handwritten numbers_files/wayback-toolbar-logo.png" alt="Wayback Machine" width="110" height="39" border="0"></a>
+   </td>
+   <td class="c">
+       <table style="margin:0 auto;"><tbody><tr>
+       <td class="u" colspan="2">
+       <form target="_top" method="get" action="https://web.archive.org/web/form-submit.jsp" name="wmtb" id="wmtb"><input type="text" name="url" id="wmtbURL" value="http://openmachin.es/blog/tensorflow-mnist-nod" style="width:400px;" onfocus="this.focus();this.select();"><input type="hidden" name="type" value="replay"><input type="hidden" name="date" value="20160306005243"><input type="submit" value="Go"><span id="wm_tb_options" style="display:block;"></span></form>
+       </td>
+       <td class="n" rowspan="2">
+           <table><tbody>
+           <!-- NEXT/PREV MONTH NAV AND MONTH INDICATOR -->
+           <tr class="m">
+           	<td class="b" nowrap="nowrap">
+		
+		    fev
+		
+		</td>
+		<td class="c" id="displayMonthEl" title="You are here: 0:52:43 mar 6, 2016">MAR</td>
+		<td class="f" nowrap="nowrap">
+		
+		    <a href="https://web.archive.org/web/20160406051233/http://openmachin.es/blog/tensorflow-mnist-nod" title="6 abr 2016"><strong>ABR</strong></a>
+		
+                </td>
+	    </tr>
+           <!-- NEXT/PREV CAPTURE NAV AND DAY OF MONTH INDICATOR -->
+           <tr class="d">
+               <td class="b" nowrap="nowrap">
+               
+                       <img src="./Recognize your handwritten numbers_files/wm_tb_prv_off.png" alt="Previous capture" width="14" height="16" border="0">
+               
+               </td>
+               <td class="c" id="displayDayEl" style="width:34px;font-size:24px;" title="You are here: 0:52:43 mar 6, 2016">6</td>
+	       <td class="f" nowrap="nowrap">
+               
+		   <a href="https://web.archive.org/web/20160405045738/http://openmachin.es/blog/tensorflow-mnist-nod" title="4:57:38 abr 5, 2016"><img src="./Recognize your handwritten numbers_files/wm_tb_nxt_on.png" alt="Next capture" width="14" height="16" border="0"></a>
+	       
+	       </td>
+           </tr>
+           <!-- NEXT/PREV YEAR NAV AND YEAR INDICATOR -->
+           <tr class="y">
+	       <td class="b" nowrap="nowrap">
+               
+                   2015
+               
+               </td>
+               <td class="c" id="displayYearEl" title="You are here: 0:52:43 mar 6, 2016">2016</td>
+	       <td class="f" nowrap="nowrap">
+               
+                   2017
+               
+	       </td>
+           </tr>
+           </tbody></table>
+       </td>
+       </tr>
+       <tr>
+       <td class="s">
+           <a class="t" href="https://web.archive.org/web/20160306005243*/http://openmachin.es/blog/tensorflow-mnist-nod" title="See a list of every capture for this URL">3 captures</a>
+           <div class="r" title="Timespan for captures of this URL">6 mar 16 - 6 abr 16</div>
+       </td>
+       <td class="k">
+       <a href="https://web.archive.org/web/20160306005243/http://openmachin.es/blog/tensorflow-mnist-nod" id="wm-graph-anchor">
+       <div id="wm-ipp-sparkline" title="Explore captures for this URL">
+	 <img id="sparklineImgId" alt="sparklines" onmouseover="__wm.st(1)" onmouseout="__wm.st(0)" onmousemove="__wm.mv(event,this)" width="525" height="27" border="0" src="./Recognize your handwritten numbers_files/graph.jsp">
+       <div class="yt" style="display: none; width: 25px; height: 27px;"></div><div class="mt" style="display: none; width: 2px; height: 27px;"></div></div>
+       </a>
+       </td>
+       </tr></tbody></table>
+   </td>
+   <td class="r">
+       <a href="https://web.archive.org/web/20160306005243/http://openmachin.es/blog/tensorflow-mnist-nod#close" onclick="__wm.h();return false;" style="background-image:url(/static/images/toolbar/wm_tb_close.png);top:5px;" title="Close the toolbar">Close</a>
+       <a href="http://faq.web.archive.org/" style="background-image:url(/static/images/toolbar/wm_tb_help.png);bottom:5px;" title="Get some help using the Wayback Machine">Help</a>
+   </td>
+   </tr></tbody></table>
+</div>
+</div>
+</div>
+
+
+<!-- BEGIN WAYBACK TOOLBAR INSERT -->
+<script type="text/javascript" src="./Recognize your handwritten numbers_files/disclaim-element.js"></script>
+<script type="text/javascript" src="./Recognize your handwritten numbers_files/graph-calc.js"></script>
+<script type="text/javascript">//<![CDATA[
+var __wm = (function(imgWidth,imgHeight,yearImgWidth,monthImgWidth){
+var wbPrefix = "/web/";
+var wbCurrentUrl = "http://openmachin.es/blog/tensorflow-mnist-nod";
+
+var firstYear = 1996;
+var displayDay = "6";
+var displayMonth = "mar";
+var displayYear = "2016";
+var prettyMonths = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+var $D=document,$=function(n){return document.getElementById(n)};
+var trackerVal,curYear = -1,curMonth = -1;
+var yearTracker,monthTracker;
+function showTrackers(val) {
+  if (val===trackerVal) return;
+  var $ipp=$("wm-ipp");
+  var $y=$("displayYearEl"),$m=$("displayMonthEl"),$d=$("displayDayEl");
+  if (val) {
+    $ipp.className="hi";
+  } else {
+    $ipp.className="";
+    $y.innerHTML=displayYear;$m.innerHTML=displayMonth;$d.innerHTML=displayDay;
+  }
+  yearTracker.style.display=val?"inline":"none";
+  monthTracker.style.display=val?"inline":"none";
+  trackerVal = val;
+}
+function trackMouseMove(event,element) {
+  var eventX = getEventX(event);
+  var elementX = getElementX(element);
+  var xOff = Math.min(Math.max(0, eventX - elementX),imgWidth);
+  var monthOff = xOff % yearImgWidth;
+
+  var year = Math.floor(xOff / yearImgWidth);
+  var monthOfYear = Math.min(11,Math.floor(monthOff / monthImgWidth));
+  // 1 extra border pixel at the left edge of the year:
+  var month = (year * 12) + monthOfYear;
+  var day = monthOff % 2==1?15:1;
+  var dateString = zeroPad(year + firstYear) + zeroPad(monthOfYear+1,2) +
+    zeroPad(day,2) + "000000";
+
+  $("displayYearEl").innerHTML=year+firstYear;
+  $("displayMonthEl").innerHTML=prettyMonths[monthOfYear];
+  // looks too jarring when it changes..
+  //$("displayDayEl").innerHTML=zeroPad(day,2);
+  var url = wbPrefix + dateString + '/' +  wbCurrentUrl;
+  $("wm-graph-anchor").href=url;
+
+  if(curYear != year) {
+    var yrOff = year * yearImgWidth;
+    yearTracker.style.left = yrOff + "px";
+    curYear = year;
+  }
+  if(curMonth != month) {
+    var mtOff = year + (month * monthImgWidth) + 1;
+    monthTracker.style.left = mtOff + "px";
+    curMonth = month;
+  }
+}
+function hideToolbar() {
+  $("wm-ipp").style.display="none";
+}
+function bootstrap() {
+  var $spk=$("wm-ipp-sparkline");
+  yearTracker=$D.createElement('div');
+  yearTracker.className='yt';
+  with(yearTracker.style){
+    display='none';width=yearImgWidth+"px";height=imgHeight+"px";
+  }
+  monthTracker=$D.createElement('div');
+  monthTracker.className='mt';
+  with(monthTracker.style){
+    display='none';width=monthImgWidth+"px";height=imgHeight+"px";
+  }
+  $spk.appendChild(yearTracker);
+  $spk.appendChild(monthTracker);
+
+  var $ipp=$("wm-ipp");
+  $ipp&&disclaimElement($ipp);
+}
+return{st:showTrackers,mv:trackMouseMove,h:hideToolbar,bt:bootstrap};
+})(525, 27, 25, 2);//]]>
+</script>
+<style type="text/css">
+body {
+  margin-top:0 !important;
+  padding-top:0 !important;
+  min-width:800px !important;
+}
+</style>
+
+<script type="text/javascript">__wm.bt();</script>
+<!-- END WAYBACK TOOLBAR INSERT -->
+
+
+
+            <a href="https://web.archive.org/web/20160306005243/http://openmachin.es/" class="logo-readium"><span class="logo" style="background-image: url(/web/20160306005243im_/http://openmachin.es/user/images/logo.png)"></span></a>
+    
+    <!-- content start -->
+
+        <main class="content tag-articleimage" role="main">
+      <article class="post">
+                <div class="article-image">
+          <div class="post-image-image" style="background-image: url(&quot;/web/20160306005243im_/http://openmachin.es/user/pages/blog/2016-03-02-tensorflow-mnist-nod/cover.png&quot;); transform: translate3d(0px, 495.333px, 0px); opacity: -1.12286;">
+            Article Image
+          </div>
+          <div class="post-meta">
+          <h1 class="post-title">Recognize your handwritten numbers</h1>
+            <div class="cf post-meta-text">
+        <div class="author-image" style="background-image: url(/web/20160306005243im_/http://openmachin.es/user/images/avatar.jpg)">Blog Logo</div>
+        <h4 class="author-name" itemprop="author" itemscope="" itemtype="http://schema.org/Person">Ole Kröger</h4>
+        on
+        <time datetime="02 Mar 2016">02 Mar 2016</time>
+                <span class="post-tags-set">in <span class="post-tag-neural nets"><a href="https://web.archive.org/web/20160306005243/http://openmachin.es/tag:neural%20nets">neural nets</a></span> + <span class="post-tag-machine learning"><a href="https://web.archive.org/web/20160306005243/http://openmachin.es/tag:machine%20learning">machine learning</a></span> + <span class="post-tag-tensorflow"><a href="https://web.archive.org/web/20160306005243/http://openmachin.es/tag:tensorflow">tensorflow</a></span></span>
+            </div>
+    <div style="text-align:center">
+        <a href="https://web.archive.org/web/20160306005243/http://openmachin.es/blog/tensorflow-mnist-nod#topofpage" class="topofpage"><i class="fa fa-angle-down"></i></a>
+    </div>
+    </div>
+        </div>
+                <section class="post-content" style="padding-top: 989px;">
+                    <div class="post-reading">
+            <span class="post-reading-time">7 min</span> read
+          </div>
+                    <a name="topofpage"></a>
+          <p>In the last <a href="https://web.archive.org/web/20160306005243/http://openmachin.es/blog/tensorflow-mnist">blog entry</a> you learned how to digitize a single handwritten digit.
+The downsides were that you have to capture a single digit and the image should be quadratic.</p>
+<p>But that's not the case.
+Now it's time to make a step further. In this entry you will learn how to "find" digits on a sheet of paper and
+recognize them.</p>
+<p>I don't wanna lie:
+At the moment in only works if the sheet is blank and you write with a good contrast.
+And unfortunately there should be nothing else on the paper. If there are some other dark "points" they will be
+recognized as digits as well. MNIST has no images for non digit images so there are no counter examples for our
+neural net.</p>
+<p>But let's start with our code:
+Make sure that you have read my previous <a href="https://web.archive.org/web/20160306005243/http://openmachin.es/blog/tensorflow-mnist">blog entry</a> about recognizing digits.</p>
+<p>At the beginning I would like to save the current instance of our trained model. There is no need to train the model
+everytime we call the programm.</p>
+<p>Therefor you have to replace these lines</p>
+<pre><code class="hljs makefile"><span class="hljs-comment"># initialize all variables</span>
+<span class="hljs-constant">init</span> = tf.initialize_all_variables()
+
+<span class="hljs-comment"># create a session</span>
+<span class="hljs-constant">sess</span> = tf.Session()
+sess.run(init)</code></pre>
+<p>with these:</p>
+<pre><code class="hljs sql"># we will <span class="hljs-operator"><span class="hljs-keyword">use</span> image+<span class="hljs-string">".png"</span>
+image = sys.argv[<span class="hljs-number">1</span>]
+train = <span class="hljs-literal">False</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">len</span>(sys.argv) == <span class="hljs-number">2</span> <span class="hljs-keyword">else</span> sys.argv[<span class="hljs-number">2</span>]
+checkpoint_dir = <span class="hljs-string">"cps/"</span>
+
+saver = tf.train.Saver()
+sess = tf.<span class="hljs-keyword">Session</span>()
+# initialize <span class="hljs-keyword">all</span> <span class="hljs-keyword">variables</span> <span class="hljs-keyword">and</span> run init
+sess.run(tf.initialize_all_variables())</span></code></pre>
+<p>Here the folder <code>cps/</code> should exist in you root folder ("cps" = our checkpoints folder)</p>
+<p>The first line checks if we want to train the model. If you want to you have to start the program with:</p>
+<pre><code class="hljs python">python2 step2.py IMAGE_NAME <span class="hljs-keyword">True</span></code></pre>
+<p>The next step is to check whether we want to train or use the checkpoint:</p>
+<pre><code class="hljs sql">if train:
+    # <span class="hljs-operator"><span class="hljs-keyword">create</span> a MNIST_data folder <span class="hljs-keyword">with</span> the MNIST dataset <span class="hljs-keyword">if</span> necessary
+    mnist = input_data.read_data_sets(<span class="hljs-string">"MNIST_data/"</span>, one_hot=<span class="hljs-literal">True</span>)
+
+    # <span class="hljs-keyword">use</span> <span class="hljs-number">1000</span> batches <span class="hljs-keyword">with</span> a <span class="hljs-keyword">size</span> <span class="hljs-keyword">of</span> <span class="hljs-number">100</span> <span class="hljs-keyword">each</span> <span class="hljs-keyword">to</span> train our net
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1000</span>):
+        batch_xs, batch_ys = mnist.train.next_batch(<span class="hljs-number">100</span>)
+        # run the train_step <span class="hljs-keyword">function</span> <span class="hljs-keyword">with</span> the given image <span class="hljs-keyword">values</span> (x) <span class="hljs-keyword">and</span> the <span class="hljs-built_in">real</span> <span class="hljs-keyword">output</span> (y_)
+        sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+    saver.save(sess, checkpoint_dir+<span class="hljs-string">'model.ckpt'</span>)
+
+    correct_prediction = tf.equal(tf.argmax(y,<span class="hljs-number">1</span>), tf.argmax(y_,<span class="hljs-number">1</span>))
+    accuracy = tf.reduce_mean(tf.<span class="hljs-keyword">cast</span>(correct_prediction, <span class="hljs-string">"float"</span>))
+    print sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels})
+<span class="hljs-keyword">else</span>:
+    # Here<span class="hljs-string">'s where you'</span>re restoring the <span class="hljs-keyword">variables</span> w <span class="hljs-keyword">and</span> b.
+    # Note that the graph <span class="hljs-keyword">is</span> exactly <span class="hljs-keyword">as</span> it was <span class="hljs-keyword">when</span> the <span class="hljs-keyword">variables</span> were
+    # saved <span class="hljs-keyword">in</span> a <span class="hljs-keyword">prior</span> training run.
+    ckpt = tf.train.get_checkpoint_state(checkpoint_dir)
+    <span class="hljs-keyword">if</span> ckpt <span class="hljs-keyword">and</span> ckpt.model_checkpoint_path:
+        saver.<span class="hljs-keyword">restore</span>(sess, ckpt.model_checkpoint_path)
+    <span class="hljs-keyword">else</span>:
+        print <span class="hljs-string">'No checkpoint found'</span>
+        exit(<span class="hljs-number">1</span>)</span></code></pre>
+<p>In the if branch we only added the line</p>
+<pre><code class="hljs coffeescript">saver.save(sess, checkpoint_dir+<span class="hljs-string">'model.ckpt'</span>)</code></pre>
+<p>The else branch restores the checkpoint.</p>
+<p>The overall approach is that we want to read an image which contains our handwritten digits.
+Then we need two versions of this image an unchanged original and a black and white one, which we can analyse in some
+steps.</p>
+<pre><code class="hljs nginx"><span class="hljs-comment"># read original image</span>
+<span class="hljs-title">color_complete</span> = cv2.imread(<span class="hljs-string">"img/blog/"</span> + image + <span class="hljs-string">".png"</span>)
+
+<span class="hljs-comment"># read the bw image</span>
+gray_complete = cv2.imread(<span class="hljs-string">"img/blog/"</span> + image + <span class="hljs-string">".png"</span>, cv2.CV_LOAD_IMAGE_GRAYSCALE)
+
+<span class="hljs-comment"># better black and white version</span>
+(thresh, gray_complete) = cv2.threshold(<span class="hljs-number">255</span>-gray_complete, <span class="hljs-number">128</span>, <span class="hljs-number">255</span>, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+cv2.imwrite(<span class="hljs-string">"pro-img/compl.png"</span>, gray_complete)
+
+digit_image = -np.ones(gray_complete.shape)</code></pre>
+<p>Here we read the original first, which we need to display our green rectangles and show our prediction.
+Then we do the steps which we have done in the previous blog entry.</p>
+<p>The last line creates a matrix which has the size of our image and fills it with <code>-1</code>.
+Inside this array we will save at which place we already found a digit so it isn't possible to recognize the same
+digit twice. That speeds up the process and stops the algorithm to create a mess of digits.</p>
+<p><figure class="image"><img style="" alt="Original image" src="./Recognize your handwritten numbers_files/color_complete.png"><figcaption>Original image</figcaption></figure></p>
+<p><figure class="image"><img style="" alt="The black and white version" src="./Recognize your handwritten numbers_files/bw_complete.png"><figcaption>The black and white version</figcaption></figure></p>
+<p>To find the digits inside our big image we will crop it in a lot of different ways.
+If there is only a single digit inside our cropped part we can find the smallest rectangle around that digit easily.</p>
+<p>I'm sorry for the following nested structure of four <code>for</code> loops.</p>
+<pre><code class="hljs python">height, width = gray_complete.shape
+
+<span class="hljs-string">"""
+crop into several images
+"""</span>
+<span class="hljs-keyword">for</span> cropped_width <span class="hljs-keyword">in</span> range(<span class="hljs-number">100</span>, <span class="hljs-number">300</span>, <span class="hljs-number">20</span>):
+    <span class="hljs-keyword">for</span> cropped_height <span class="hljs-keyword">in</span> range(<span class="hljs-number">100</span>, <span class="hljs-number">300</span>, <span class="hljs-number">20</span>):
+        <span class="hljs-keyword">for</span> shift_x <span class="hljs-keyword">in</span> range(<span class="hljs-number">0</span>, width-cropped_width, cropped_width/<span class="hljs-number">4</span>):
+            <span class="hljs-keyword">for</span> shift_y <span class="hljs-keyword">in</span> range(<span class="hljs-number">0</span>, height-cropped_height, cropped_height/<span class="hljs-number">4</span>):</code></pre>
+<p>Here we define the smallest and the largest width and height of a single digit (<code>cropped_width</code> and <code>cropped_height</code>).
+Then we have to shift the rectangle using the <code>shift_x</code> and the <code>shift_y</code> <code>for</code> loop.</p>
+<p>All of the following code will be inside this nested loops.</p>
+<p>Our cropped image called <code>gray</code>:</p>
+<pre><code class="hljs bash">gray = gray_complete[<span class="hljs-built_in">shift</span>_y:<span class="hljs-built_in">shift</span>_y+cropped_height,<span class="hljs-built_in">shift</span>_x:<span class="hljs-built_in">shift</span>_x + cropped_width]</code></pre>
+<p>If the cropped image is almost empty (blank) we can move to the next one:</p>
+<pre><code class="hljs coffeescript"><span class="hljs-keyword">if</span> np.count_nonzero(gray) &lt;= <span class="hljs-number">20</span>:
+    <span class="hljs-keyword">continue</span></code></pre>
+<p>And if we cut through a digit somewhere, which means that there is no white border, we can continue as well:</p>
+<pre><code class="hljs coffeescript"><span class="hljs-keyword">if</span> (np.sum(gray[<span class="hljs-number">0</span>]) != <span class="hljs-number">0</span>) <span class="hljs-keyword">or</span> (np.sum(gray[:,<span class="hljs-number">0</span>]) != <span class="hljs-number">0</span>) <span class="hljs-keyword">or</span> (np.sum(gray[-<span class="hljs-number">1</span>]) != <span class="hljs-number">0</span>) <span class="hljs-keyword">or</span> (np.sum(gray[:,-<span class="hljs-number">1</span>]) != <span class="hljs-number">0</span>):
+    <span class="hljs-keyword">continue</span></code></pre>
+<p>We want to save the top left and the bottom right position of our rectangle to show the rectangle at the end.</p>
+<pre><code class="hljs bash">top_left = np.array([<span class="hljs-built_in">shift</span>_y, <span class="hljs-built_in">shift</span>_x])
+bottom_right = np.array([<span class="hljs-built_in">shift</span>_y+cropped_height, <span class="hljs-built_in">shift</span>_x + cropped_width])</code></pre>
+<p>Now we can find the smallest rectangle in the same way as we did last time.</p>
+<pre><code class="hljs coffeescript"><span class="hljs-keyword">while</span> np.sum(gray[<span class="hljs-number">0</span>]) == <span class="hljs-number">0</span>:
+    top_left[<span class="hljs-number">0</span>] += <span class="hljs-number">1</span>
+    gray = gray[<span class="hljs-number">1</span>:]
+
+<span class="hljs-keyword">while</span> np.sum(gray[:,<span class="hljs-number">0</span>]) == <span class="hljs-number">0</span>:
+    top_left[<span class="hljs-number">1</span>] += <span class="hljs-number">1</span>
+    gray = np.<span class="hljs-keyword">delete</span>(gray,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>)
+
+<span class="hljs-keyword">while</span> np.sum(gray[-<span class="hljs-number">1</span>]) == <span class="hljs-number">0</span>:
+    bottom_right[<span class="hljs-number">0</span>] -= <span class="hljs-number">1</span>
+    gray = gray[:-<span class="hljs-number">1</span>]
+
+<span class="hljs-keyword">while</span> np.sum(gray[:,-<span class="hljs-number">1</span>]) == <span class="hljs-number">0</span>:
+    bottom_right[<span class="hljs-number">1</span>] -= <span class="hljs-number">1</span>
+    gray = np.<span class="hljs-keyword">delete</span>(gray,-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)</code></pre>
+<p>but we need to change our top left and bottom right points inside the loops.</p>
+<p>Now we can check if there is already a digit inside the current rectangle using our <code>digit_image</code> array.</p>
+<pre><code class="hljs ruby">actual_w_h = bottom_right-top_left
+<span class="hljs-keyword">if</span> (np.count_nonzero(digit_image[top_left[<span class="hljs-number">0</span>]<span class="hljs-symbol">:bottom_right</span>[<span class="hljs-number">0</span>],top_left[<span class="hljs-number">1</span>]<span class="hljs-symbol">:bottom_right</span>[<span class="hljs-number">1</span>]]+<span class="hljs-number">1</span>) &gt;
+            <span class="hljs-number">0</span>.<span class="hljs-number">2</span>*actual_w_h[<span class="hljs-number">0</span>]*actual_w_h[<span class="hljs-number">1</span>])<span class="hljs-symbol">:</span>
+    continue</code></pre>
+<p>What are we doing exactly?</p>
+<p>At first we get the rectangle inside our <code>digit_image</code> using:</p>
+<pre><code class="hljs css"><span class="hljs-tag">digit_image</span><span class="hljs-attr_selector">[top_left[0]</span><span class="hljs-pseudo">:bottom_right</span><span class="hljs-attr_selector">[0]</span>,<span class="hljs-tag">top_left</span><span class="hljs-attr_selector">[1]</span><span class="hljs-pseudo">:bottom_right</span><span class="hljs-attr_selector">[1]</span>]</code></pre>
+<p>but in the initialized step everything is filled with <code>-1</code> which obviously is <code>nonzero</code>.
+Therefor we add <code>+1</code> before we count the number of <code>nonzero</code> values.
+If this number is bigger than 20% of the actual image we would say that the space is used already and maybe we found
+exactly that digit already.</p>
+<p>The following is preprocessing the single digit like last time.
+We need to resize it into a 28x28 image but we want to keep the ratio, so we add some black lines, keep in mind, that
+the image is inverted at the moment, at the top,bottom or left and right.</p>
+<pre><code class="hljs perl">rows,cols = gray.shape
+compl_dif = <span class="hljs-keyword">abs</span>(rows-cols)
+half_Sm = compl_dif/<span class="hljs-number">2</span>
+half_Big = half_Sm <span class="hljs-keyword">if</span> half_Sm*<span class="hljs-number">2</span> == compl_dif <span class="hljs-keyword">else</span> half_Sm+<span class="hljs-number">1</span>
+<span class="hljs-keyword">if</span> rows &gt; cols:
+    gray = np.lib.pad(gray,((<span class="hljs-number">0</span>,<span class="hljs-number">0</span>),(half_Sm,half_Big)),<span class="hljs-string">'constant'</span>)
+<span class="hljs-keyword">else</span>:
+    gray = np.lib.pad(gray,((half_Sm,half_Big),(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>)),<span class="hljs-string">'constant'</span>)
+</code></pre>
+<p>Here we need a smaller and a bigger half to have a quadratic image at the end.</p>
+<p>And then we resize it to our 20x20 inner bounding box, add the black lines to get a 28x28 image and shift it using
+the center of mass.</p>
+<pre><code class="hljs makefile"><span class="hljs-constant">gray</span> = cv2.resize(gray, (20, 20))
+<span class="hljs-constant">gray</span> = np.lib.pad(gray,((4,4),(4,4)),'constant')
+
+shiftx,shifty = getBestShift(gray)
+<span class="hljs-constant">shifted</span> = shift(gray,shiftx,shifty)
+<span class="hljs-constant">gray</span> = shifted</code></pre>
+<p>To get our prediction we have to flatten the image and use values between <code>0</code> and <code>1</code>.</p>
+<pre><code class="hljs nginx"><span class="hljs-title">flatten</span> = gray.flatten() / <span class="hljs-number">255</span>.<span class="hljs-number">0</span></code></pre>
+<p>To get our prediction we need the following tensorflow lines:</p>
+<pre><code class="hljs makefile"><span class="hljs-constant">prediction</span> = [tf.reduce_max(y),tf.argmax(y,1)[0]]
+<span class="hljs-constant">pred</span> = sess.run(prediction, feed_dict={x: [flatten]})
+print pred</code></pre>
+<p>The first value inside pred is the probability that the second value which represents our prediction is correct.
+Well the probability is meassured by our algorithm and is probably not that reliable.</p>
+<p>At the top of our nested lopps we used our <code>digit_image</code> array, now it's time to fill it with some value, because we
+now found a digit:</p>
+<pre><code class="hljs ruby">digit_image[top_left[<span class="hljs-number">0</span>]<span class="hljs-symbol">:bottom_right</span>[<span class="hljs-number">0</span>],top_left[<span class="hljs-number">1</span>]<span class="hljs-symbol">:bottom_right</span>[<span class="hljs-number">1</span>]] = pred[<span class="hljs-number">1</span>]</code></pre>
+<p>Okay actually not a digit but just some points on a white paper but we think, that it is a digit.</p>
+<p>Let's add our green border and our prediction to our original image:</p>
+<pre><code class="hljs ruby">cv2.rectangle(color_complete,tuple(top_left[<span class="hljs-symbol">:</span><span class="hljs-symbol">:-</span><span class="hljs-number">1</span>]),tuple(bottom_right[<span class="hljs-symbol">:</span><span class="hljs-symbol">:-</span><span class="hljs-number">1</span>]),color=(<span class="hljs-number">0</span>,<span class="hljs-number">255</span>,<span class="hljs-number">0</span>),thickness=<span class="hljs-number">5</span>)
+
+font = cv2.<span class="hljs-constant">FONT_HERSHEY_SIMPLEX</span>
+<span class="hljs-comment"># digit we predicted</span>
+cv2.putText(color_complete,str(pred[<span class="hljs-number">1</span>]),(top_left[<span class="hljs-number">1</span>],bottom_right[<span class="hljs-number">0</span>]+<span class="hljs-number">50</span>),
+            font,fontScale=<span class="hljs-number">1.4</span>,color=(<span class="hljs-number">0</span>,<span class="hljs-number">255</span>,<span class="hljs-number">0</span>),thickness=<span class="hljs-number">4</span>)
+<span class="hljs-comment"># percentage</span>
+cv2.putText(color_complete,format(pred[<span class="hljs-number">0</span>]*<span class="hljs-number">100</span>,<span class="hljs-string">".1f"</span>)+<span class="hljs-string">"%"</span>,(top_left[<span class="hljs-number">1</span>]+<span class="hljs-number">30</span>,bottom_right[<span class="hljs-number">0</span>]+<span class="hljs-number">60</span>),
+            font,fontScale=<span class="hljs-number">0</span>.<span class="hljs-number">8</span>,color=(<span class="hljs-number">0</span>,<span class="hljs-number">255</span>,<span class="hljs-number">0</span>),thickness=<span class="hljs-number">2</span>)</code></pre>
+<p><strong>After</strong> the loops we now want to save our image:</p>
+<pre><code class="hljs coffeescript">cv2.imwrite(<span class="hljs-string">"pro-img/digitized_image.png"</span>, color_complete)</code></pre>
+<p><figure class="image"><img style="" alt="Our result" src="./Recognize your handwritten numbers_files/cover.png"><figcaption>Our result</figcaption></figure></p>
+<h2>What's next?</h2>
+<p>How good is our approach? First of all it's pretty simple. We can't work with all sizes of digits because our cropped
+width are defined inside the code.</p>
+<p><figure class="image"><img style="" alt="Too big numbers and overlapping" src="./Recognize your handwritten numbers_files/big_overlapping.png"><figcaption>Too big numbers and overlapping</figcaption></figure></p>
+<p>But if that's no problem a big one is, that the blank sheet of paper should only contain numbers.</p>
+<p><figure class="image"><img style="" alt="Not only digits" src="./Recognize your handwritten numbers_files/abc123.png"><figcaption>Not only digits</figcaption></figure></p>
+<p>To avoid this we would need a different neural net which can tell us, if the cropped part of an image contains a number
+or not.
+Something like counter examples for MNIST. Then we can add them to our training examples and add another value <code>11</code>
+which represents not a digit (short NaD :D). If our prediction has his maximum value on that eleventh value we can
+ignore it.</p>
+<p>You can download all the code on my <a href="https://web.archive.org/web/20160306005243/https://github.com/openmachinesblog/tensorflow-mnist">OpenMachines GitHub repo</a>.</p>
+		 <div id="jscomments">
+    <div id="disqus_thread"><iframe id="dsq-app1" name="dsq-app1" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" width="100%" src="./Recognize your handwritten numbers_files/saved_resource.html" style="width: 1px !important; min-width: 100% !important; border: none !important; overflow: hidden !important; height: 2669px !important;" horizontalscrolling="no" verticalscrolling="no"></iframe><iframe id="indicator-north" name="indicator-north" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" style="width: 640px !important; border: none !important; overflow: hidden !important; top: 0px !important; min-width: 640px !important; max-width: 640px !important; position: fixed !important; z-index: 2147483646 !important; height: 29px !important; min-height: 29px !important; max-height: 29px !important; display: none !important;" src="./Recognize your handwritten numbers_files/saved_resource(1).html"></iframe><iframe id="indicator-south" name="indicator-south" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" style="width: 640px !important; border: none !important; overflow: hidden !important; bottom: 0px !important; min-width: 640px !important; max-width: 640px !important; position: fixed !important; z-index: 2147483646 !important; height: 29px !important; min-height: 29px !important; max-height: 29px !important; display: none !important;" src="./Recognize your handwritten numbers_files/saved_resource(2).html"></iframe></div>
+
+    
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.language = 'en';
+        };
+        var disqus_shortname  = 'openmachines'; // required: replace example with your forum shortname
+        var disqus_title      = 'Recognize\x20your\x20handwritten\x20numbers';
+        var disqus_identifier = 'http\x3A\x2F\x2Fopenmachin.es\x2Fblog\x2Ftensorflow\x2Dmnist\x2Dnod';
+        var disqus_url        = 'http\x3A\x2F\x2Fopenmachin.es\x2Fblog\x2Ftensorflow\x2Dmnist\x2Dnod';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the &lt;a href="/web/20160306005243/http://disqus.com/?ref_noscript"&gt;comments powered by Disqus.&lt;/a&gt;</noscript>
+    
+</div>
+
+        </section>
+        
+        
+    
+                <footer class="post-footer">
+          <section class="share">
+           <a href="https://web.archive.org/web/20160306005243/https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=B5VQXWCZXYN2W" target="_blank"><img src="./Recognize your handwritten numbers_files/btn_donateCC_LG.gif" alt="Donate" title="Donate" border="0"></a>
+                                          <a class="icon-twitter" href="https://web.archive.org/web/20160306005243/http://twitter.com/share?text=%20%20Recognize%20your%20handwritten%20numbers%20by%20@Wikunia_de%20http://openmachin.es/blog/tensorflow-mnist-nod%20&amp;url=14569296527847b0f1cb9e978d96224c55b4da7b0b" onclick="window.open(this.href, &#39;twitter-share&#39;, &#39;width=550,height=255&#39;);return false;">
+                <i class="fa fa-twitter"></i><span class="hidden">twitter</span>
+                </a>
+                                                              </section>
+        </footer>
+        <div class="bottom-teaser cf">
+          <div class="isLeft">
+            <h5 class="index-headline featured"><span>Written by</span></h5>
+            <section class="author">
+              <div class="author-image" style="background-image: url(/web/20160306005243im_/http://openmachin.es/user/images/avatar.jpg)">Blog Logo</div>
+              <h4>Ole Kröger</h4>
+              <p class="bio"></p>
+              <hr>
+              <p class="published">Published <time datetime="02 Mar 2016">02 Mar 2016</time></p>
+            </section>
+          </div>
+                    <div class="isRight">
+            <h5 class="index-headline featured"><span>Supported by</span></h5>
+            <footer class="site-footer">
+              <section class="poweredby">Proudly published with <a href="https://web.archive.org/web/20160306005243/http://getgrav.org/"> Grav</a></section>
+              <a class="subscribe" href="https://web.archive.org/web/20160306005243/http://openmachin.es/blog.rss"> <span class="tooltip"> <i class="fa fa-rss"></i> You should subscribe to my feed.</span></a>
+              <div class="inner">
+                <section class="copyright">All content copyright <a href="https://web.archive.org/web/20160306005243/http://openmachin.es/blog/tensorflow-mnist-nod">Ole Kröger</a> © 2016<br>All rights reserved.</section>
+              </div>
+            </footer>
+          </div>
+        </div>
+        
+      </article>
+    </main>
+    <div class="bottom-closer">
+      <div class="background-closer-image" style="background-image: url(/web/20160306005243im_/http://openmachin.es/images/9/4/e/b/7/94eb7eb722c170f67d9b4ae2096a1a4cc2fc3091-background.jpeg)">
+        Image
+      </div>
+      <div class="inner">
+        <h1 class="blog-title">]OpenMachines[</h1>
+        <h2 class="blog-description">About Brackets, Machine Learning and more</h2>
+        <a href="https://web.archive.org/web/20160306005243/http://openmachin.es/" class="btn">Back to Overview</a>
+      </div>
+    </div>
+    <!-- content end -->
+
+    
+
+<script src="./Recognize your handwritten numbers_files/jquery-2.1.4.min.js" type="text/javascript"></script><iframe style="display: none;" src="./Recognize your handwritten numbers_files/saved_resource(3).html"></iframe>
+<script src="./Recognize your handwritten numbers_files/highlight.pack.js" type="text/javascript"></script>
+<script src="./Recognize your handwritten numbers_files/mathjax.js" type="text/javascript"></script>
+<script src="./Recognize your handwritten numbers_files/mathjax(1).js" type="text/javascript"></script>
+<script src="./Recognize your handwritten numbers_files/jquery.fitvids.js" type="text/javascript"></script>
+<script src="./Recognize your handwritten numbers_files/index.js" type="text/javascript"></script>
+<script src="./Recognize your handwritten numbers_files/readingTime.min.js" type="text/javascript"></script>
+<script>
+$(document).ready(function() {
+                    $('pre code').each(function(i, block) {
+                        hljs.highlightBlock(block);
+                    });
+                 });
+</script>
+
+
+<script>
+(function ($) {
+  "use strict";
+  $(document).ready(function(){
+
+    var $window = $(window),
+    $image = $('.post-image-image, .teaserimage-image');
+    $window.on('scroll', function() {
+      var top = $window.scrollTop();
+
+      if (top < 0 || top > 1500) { return; }
+      $image
+        .css('transform', 'translate3d(0px, '+top/3+'px, 0px)')
+        .css('opacity', 1-Math.max(top/700, 0));
+    });
+    $window.trigger('scroll');
+
+    var height = $('.article-image').height();
+    $('.post-content').css('padding-top', height + 'px');
+
+    $('a[href*=#]:not([href=#])').click(function() {
+      if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'')
+       && location.hostname == this.hostname) {
+        var target = $(this.hash);
+        target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+        if (target.length) {
+          $('html,body').animate({ scrollTop: target.offset().top }, 500);
+          return false;
+        }
+      }
+    });
+  });
+}(jQuery));
+</script>
+
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//analytics.wikunia.de/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', 3]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript>&lt;p&gt;&lt;img src="/web/20160306005243im_/http://analytics.wikunia.de/piwik.php?idsite=3" style="border:0;" alt="" /&gt;&lt;/p&gt;</noscript>
+
+
+
+
+
+
+
+<!--
+     FILE ARCHIVED ON 0:52:43 mar 6, 2016 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 15:05:33 nov 2, 2016.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->
+</body></html>

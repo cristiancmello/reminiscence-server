@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<!-- saved from url=(0085)https://web.archive.org/web/20160804014429/http://openmachin.es/blog/tensorflow-mnist -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+<div class="fit-vids-style" id="fit-vids-style" style="display: none;">­<style>.fluid-width-video-wrapper{width:100%;position:relative;padding:0;}.fluid-width-video-wrapper iframe,.fluid-width-video-wrapper object,.fluid-width-video-wrapper embed {position:absolute;top:0;left:0;width:100%;height:100%;}</style></div><script type="text/javascript" async="" defer="" src="https://analytics.wikunia.de/piwik.js"></script><script type="text/javascript" src="./Tensorflow, MNIST and your own handwritten digits_files/analytics.js"></script>
+<script type="text/javascript">archive_analytics.values.server_name="wwwb-app6.us.archive.org";archive_analytics.values.server_ms=327;</script>
+<link type="text/css" rel="stylesheet" href="./Tensorflow, MNIST and your own handwritten digits_files/banner-styles.css">
+
+
+    
+    <!-- (1) Optimize for mobile versions: /web/20160804014429/http://goo.gl/EOpFl -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- (1) force latest IE rendering engine: bit.ly/1c8EiC9 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Tensorflow, MNIST and your own handwritten digits</title>
+    <meta name="description" content="About Brackets, Machine Learning and more">
+
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+        <meta name="generator" content="GravCMS 0.9.45">
+        <meta name="description" content="]OpenMachines[ is a blog about Brackets, Machine Learning and more">
+    
+    <link rel="canonical" href="https://web.archive.org/blog/tensorflow-mnist">
+    <link rel="shortcut icon" href="https://web.archive.org/web/20160804014429im_/http://openmachin.es/user/themes/mediator/images/favicon.png">
+    <link rel="stylesheet" href="./Tensorflow, MNIST and your own handwritten digits_files/Open+Sans-400,400i,700,700i">
+    <link href="./Tensorflow, MNIST and your own handwritten digits_files/font-awesome.min.css" rel="stylesheet">
+
+
+                    <link href="./Tensorflow, MNIST and your own handwritten digits_files/default.css" type="text/css" rel="stylesheet">
+<link href="./Tensorflow, MNIST and your own handwritten digits_files/mathjax.css" type="text/css" rel="stylesheet">
+<link href="./Tensorflow, MNIST and your own handwritten digits_files/login.css" type="text/css" rel="stylesheet">
+<link href="./Tensorflow, MNIST and your own handwritten digits_files/main.css" type="text/css" rel="stylesheet">
+<link href="./Tensorflow, MNIST and your own handwritten digits_files/table.css" type="text/css" rel="stylesheet">
+
+<script type="text/javascript" async="" src="./Tensorflow, MNIST and your own handwritten digits_files/embed.js"></script><link rel="stylesheet" href="./Tensorflow, MNIST and your own handwritten digits_files/loading.88cedde79846569c88b36b63a7cc7414.css"><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+<body itemscope="" itemtype="http://schema.org/Article"><div id="MathJax_Message" style="display: none;"></div><div id="wm-ipp" lang="en" style="display: block;">
+
+<div style="position:fixed;left:0;top:0;width:100%!important">
+<div id="wm-ipp-inside">
+   <table style="width:100%;"><tbody><tr>
+   <td id="wm-logo">
+       <a href="https://web.archive.org/web/" title="Wayback Machine home page"><img src="./Tensorflow, MNIST and your own handwritten digits_files/wayback-toolbar-logo.png" alt="Wayback Machine" width="110" height="39" border="0"></a>
+   </td>
+   <td class="c">
+       <table style="margin:0 auto;"><tbody><tr>
+       <td class="u" colspan="2">
+       <form target="_top" method="get" action="https://web.archive.org/web/form-submit.jsp" name="wmtb" id="wmtb"><input type="text" name="url" id="wmtbURL" value="http://openmachin.es/blog/tensorflow-mnist" style="width:400px;" onfocus="this.focus();this.select();"><input type="hidden" name="type" value="replay"><input type="hidden" name="date" value="20160804014429"><input type="submit" value="Go"><span id="wm_tb_options" style="display:block;"></span></form>
+       </td>
+       <td class="n" rowspan="2">
+           <table><tbody>
+           <!-- NEXT/PREV MONTH NAV AND MONTH INDICATOR -->
+           <tr class="m">
+           	<td class="b" nowrap="nowrap">
+		
+		    <a href="https://web.archive.org/web/20160406050034/http://openmachin.es/blog/tensorflow-mnist" title="6 abr 2016">ABR</a>
+		
+		</td>
+		<td class="c" id="displayMonthEl" title="You are here: 1:44:29 ago 4, 2016">AGO</td>
+		<td class="f" nowrap="nowrap">
+		
+		    set
+		
+                </td>
+	    </tr>
+           <!-- NEXT/PREV CAPTURE NAV AND DAY OF MONTH INDICATOR -->
+           <tr class="d">
+               <td class="b" nowrap="nowrap">
+               
+                   <a href="https://web.archive.org/web/20160406050034/http://openmachin.es/blog/tensorflow-mnist" title="5:00:34 abr 6, 2016"><img src="./Tensorflow, MNIST and your own handwritten digits_files/wm_tb_prv_on.png" alt="Previous capture" width="14" height="16" border="0"></a>
+               
+               </td>
+               <td class="c" id="displayDayEl" style="width:34px;font-size:24px;" title="You are here: 1:44:29 ago 4, 2016">4</td>
+	       <td class="f" nowrap="nowrap">
+               
+                   <img src="./Tensorflow, MNIST and your own handwritten digits_files/wm_tb_nxt_off.png" alt="Next capture" width="14" height="16" border="0">
+               
+	       </td>
+           </tr>
+           <!-- NEXT/PREV YEAR NAV AND YEAR INDICATOR -->
+           <tr class="y">
+	       <td class="b" nowrap="nowrap">
+               
+                   2015
+               
+               </td>
+               <td class="c" id="displayYearEl" title="You are here: 1:44:29 ago 4, 2016">2016</td>
+	       <td class="f" nowrap="nowrap">
+               
+                   2017
+               
+	       </td>
+           </tr>
+           </tbody></table>
+       </td>
+       </tr>
+       <tr>
+       <td class="s">
+           <a class="t" href="https://web.archive.org/web/20160804014429*/http://openmachin.es/blog/tensorflow-mnist" title="See a list of every capture for this URL">6 captures</a>
+           <div class="r" title="Timespan for captures of this URL">30 nov 15 - 4 ago 16</div>
+       </td>
+       <td class="k">
+       <a href="https://web.archive.org/web/20160804014429/http://openmachin.es/blog/tensorflow-mnist" id="wm-graph-anchor">
+       <div id="wm-ipp-sparkline" title="Explore captures for this URL">
+	 <img id="sparklineImgId" alt="sparklines" onmouseover="__wm.st(1)" onmouseout="__wm.st(0)" onmousemove="__wm.mv(event,this)" width="525" height="27" border="0" src="./Tensorflow, MNIST and your own handwritten digits_files/graph.jsp">
+       <div class="yt" style="display: none; width: 25px; height: 27px;"></div><div class="mt" style="display: none; width: 2px; height: 27px;"></div></div>
+       </a>
+       </td>
+       </tr></tbody></table>
+   </td>
+   <td class="r">
+       <a href="https://web.archive.org/web/20160804014429/http://openmachin.es/blog/tensorflow-mnist#close" onclick="__wm.h();return false;" style="background-image:url(/static/images/toolbar/wm_tb_close.png);top:5px;" title="Close the toolbar">Close</a>
+       <a href="http://faq.web.archive.org/" style="background-image:url(/static/images/toolbar/wm_tb_help.png);bottom:5px;" title="Get some help using the Wayback Machine">Help</a>
+   </td>
+   </tr></tbody></table>
+</div>
+</div>
+</div>
+
+
+<!-- BEGIN WAYBACK TOOLBAR INSERT -->
+<script type="text/javascript" src="./Tensorflow, MNIST and your own handwritten digits_files/disclaim-element.js"></script>
+<script type="text/javascript" src="./Tensorflow, MNIST and your own handwritten digits_files/graph-calc.js"></script>
+<script type="text/javascript">//<![CDATA[
+var __wm = (function(imgWidth,imgHeight,yearImgWidth,monthImgWidth){
+var wbPrefix = "/web/";
+var wbCurrentUrl = "http://openmachin.es/blog/tensorflow-mnist";
+
+var firstYear = 1996;
+var displayDay = "4";
+var displayMonth = "ago";
+var displayYear = "2016";
+var prettyMonths = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+var $D=document,$=function(n){return document.getElementById(n)};
+var trackerVal,curYear = -1,curMonth = -1;
+var yearTracker,monthTracker;
+function showTrackers(val) {
+  if (val===trackerVal) return;
+  var $ipp=$("wm-ipp");
+  var $y=$("displayYearEl"),$m=$("displayMonthEl"),$d=$("displayDayEl");
+  if (val) {
+    $ipp.className="hi";
+  } else {
+    $ipp.className="";
+    $y.innerHTML=displayYear;$m.innerHTML=displayMonth;$d.innerHTML=displayDay;
+  }
+  yearTracker.style.display=val?"inline":"none";
+  monthTracker.style.display=val?"inline":"none";
+  trackerVal = val;
+}
+function trackMouseMove(event,element) {
+  var eventX = getEventX(event);
+  var elementX = getElementX(element);
+  var xOff = Math.min(Math.max(0, eventX - elementX),imgWidth);
+  var monthOff = xOff % yearImgWidth;
+
+  var year = Math.floor(xOff / yearImgWidth);
+  var monthOfYear = Math.min(11,Math.floor(monthOff / monthImgWidth));
+  // 1 extra border pixel at the left edge of the year:
+  var month = (year * 12) + monthOfYear;
+  var day = monthOff % 2==1?15:1;
+  var dateString = zeroPad(year + firstYear) + zeroPad(monthOfYear+1,2) +
+    zeroPad(day,2) + "000000";
+
+  $("displayYearEl").innerHTML=year+firstYear;
+  $("displayMonthEl").innerHTML=prettyMonths[monthOfYear];
+  // looks too jarring when it changes..
+  //$("displayDayEl").innerHTML=zeroPad(day,2);
+  var url = wbPrefix + dateString + '/' +  wbCurrentUrl;
+  $("wm-graph-anchor").href=url;
+
+  if(curYear != year) {
+    var yrOff = year * yearImgWidth;
+    yearTracker.style.left = yrOff + "px";
+    curYear = year;
+  }
+  if(curMonth != month) {
+    var mtOff = year + (month * monthImgWidth) + 1;
+    monthTracker.style.left = mtOff + "px";
+    curMonth = month;
+  }
+}
+function hideToolbar() {
+  $("wm-ipp").style.display="none";
+}
+function bootstrap() {
+  var $spk=$("wm-ipp-sparkline");
+  yearTracker=$D.createElement('div');
+  yearTracker.className='yt';
+  with(yearTracker.style){
+    display='none';width=yearImgWidth+"px";height=imgHeight+"px";
+  }
+  monthTracker=$D.createElement('div');
+  monthTracker.className='mt';
+  with(monthTracker.style){
+    display='none';width=monthImgWidth+"px";height=imgHeight+"px";
+  }
+  $spk.appendChild(yearTracker);
+  $spk.appendChild(monthTracker);
+
+  var $ipp=$("wm-ipp");
+  $ipp&&disclaimElement($ipp);
+}
+return{st:showTrackers,mv:trackMouseMove,h:hideToolbar,bt:bootstrap};
+})(525, 27, 25, 2);//]]>
+</script>
+<style type="text/css">
+body {
+  margin-top:0 !important;
+  padding-top:0 !important;
+  min-width:800px !important;
+}
+</style>
+
+<script type="text/javascript">__wm.bt();</script>
+<!-- END WAYBACK TOOLBAR INSERT -->
+
+
+
+            <a href="https://web.archive.org/web/20160804014429/http://openmachin.es/" class="logo-readium"><span class="logo" style="background-image: url(/web/20160804014429im_/http://openmachin.es/user/images/logo.png)"></span></a>
+    
+    <!-- content start -->
+
+        <main class="content tag-articleimage" role="main">
+      <article class="post">
+                <div class="article-image">
+          <div class="post-image-image" style="background-image: url(&quot;/web/20160804014429im_/http://openmachin.es/user/pages/blog/2015-11-18-tensorflow-mnist/cover.png&quot;); transform: translate3d(0px, 198px, 0px); opacity: 0.151429;">
+            Article Image
+          </div>
+          <div class="post-meta">
+          <h1 class="post-title">Tensorflow, MNIST and your own handwritten digits</h1>
+            <div class="cf post-meta-text">
+        <div class="author-image" style="background-image: url(/web/20160804014429im_/http://openmachin.es/user/images/avatar.jpg)">Blog Logo</div>
+        <h4 class="author-name" itemprop="author" itemscope="" itemtype="http://schema.org/Person">Ole Kröger</h4>
+        on
+        <time datetime="17 Nov 2015">17 Nov 2015</time>
+                <span class="post-tags-set">in <span class="post-tag-neural nets"><a href="https://web.archive.org/web/20160804014429/http://openmachin.es/tag:neural%20nets">neural nets</a></span> + <span class="post-tag-machine learning"><a href="https://web.archive.org/web/20160804014429/http://openmachin.es/tag:machine%20learning">machine learning</a></span> + <span class="post-tag-tensorflow"><a href="https://web.archive.org/web/20160804014429/http://openmachin.es/tag:tensorflow">tensorflow</a></span></span>
+            </div>
+    <div style="text-align:center">
+        <a href="https://web.archive.org/web/20160804014429/http://openmachin.es/blog/tensorflow-mnist#topofpage" class="topofpage"><i class="fa fa-angle-down"></i></a>
+    </div>
+    </div>
+        </div>
+                <section class="post-content" style="padding-top: 989px;">
+                    <div class="post-reading">
+            <span class="post-reading-time">7 min</span> read
+          </div>
+                    <a name="topofpage"></a>
+          <p>There are a lot of articles about <a href="https://web.archive.org/web/20160804014429/http://yann.lecun.com/exdb/mnist/">MNIST</a> and how to learn handwritten digits.
+So this one will be just another one?
+Nope, I'll will use the newest available library <a href="https://web.archive.org/web/20160804014429/http://www.tensorflow.org/">Tensorflow by Google</a>, but they have
+there own MNIST article inside there tutorial section <a href="https://web.archive.org/web/20160804014429/http://www.tensorflow.org/tutorials/mnist/beginners/index.md">here</a>.</p>
+<p>Come on, so this one will be just another one?
+Really nope, I didn't find any article which describes how to recognize the digits as we normally write them.
+All digits inside MNIST looks like this</p>
+<p><figure class="image"><img style="" alt="MNIST 8043" src="./Tensorflow, MNIST and your own handwritten digits_files/8043.png"><figcaption>MNIST 8043</figcaption></figure></p>
+<p>but no one writes with a perfect white pen on a black background.
+You will use your camera and make a photo where the digit isn't in the center.
+That will look something like this:</p>
+<p><figure class="image"><img style="" alt="Real handwritten digits 8043" src="./Tensorflow, MNIST and your own handwritten digits_files/own_8043.png"><figcaption>Real handwritten digits 8043</figcaption></figure></p>
+<p>If you use that as the input for your neural net, you will get some random results.
+The last part of every article about MNIST is about the accuracy which is something around &gt;85% and you will get
+something like 10% (random).</p>
+<p>How to get this accuracy with your own handwritten digits?</p>
+<h2>The MNIST dataset - a small overview</h2>
+<p>The MNIST dataset is a dataset of handwritten digits which includes 60,000 examples for the training phase and 10,000
+images of handwritten digits in the test set. All images are size normalized to fit in a 20x20 pixel box and there
+are centered in a 28x28 image using the center of mass. These are important information for our preprocessing.</p>
+<h2>Tensorflow - Library for machine learning by Google</h2>
+<p>Tensorflow is an open source software library for machine learning which provides a flexible architecture and can
+run on the GPU and CPU and on many different devices including mobile devices.</p>
+<p>It's helpful to read the MNIST tutorial directly on their side <a href="https://web.archive.org/web/20160804014429/http://www.tensorflow.org/tutorials/mnist/beginners/index.md">here</a>.</p>
+<p>Here is the code from the tutorial with some comments.</p>
+<pre><code class="hljs python"><span class="hljs-string">"""
+import tensorflow and the input_data script
+"""</span>
+<span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
+<span class="hljs-keyword">import</span> input_data</code></pre>
+<p>You can download the  <code>input_data</code> class
+<a href="https://web.archive.org/web/20160804014429/https://github.com/tensorflow/tensorflow/blob/r0.9/tensorflow/examples/tutorials/mnist/input_data.py">here</a>.</p>
+<pre><code class="hljs python"><span class="hljs-comment"># create a MNIST_data folder with the MNIST dataset if necessary   </span>
+mnist = input_data.read_data_sets(<span class="hljs-string">"MNIST_data/"</span>, one_hot=<span class="hljs-keyword">True</span>)
+
+<span class="hljs-string">"""
+a placeholder for our image data:
+None stands for an unspecified number of images
+784 = 28*28 pixel
+"""</span>
+x = tf.placeholder(<span class="hljs-string">"float"</span>, [<span class="hljs-keyword">None</span>, <span class="hljs-number">784</span>])
+
+<span class="hljs-comment"># we need our weights for our neural net</span>
+W = tf.Variable(tf.zeros([<span class="hljs-number">784</span>,<span class="hljs-number">10</span>]))
+<span class="hljs-comment"># and the biases</span>
+b = tf.Variable(tf.zeros([<span class="hljs-number">10</span>]))
+
+<span class="hljs-string">"""
+softmax provides a probability based output
+we need to multiply the image values x and the weights
+and add the biases
+(the normal procedure, explained in previous articles)
+"""</span>
+y = tf.nn.softmax(tf.matmul(x,W) + b)
+
+<span class="hljs-string">"""
+y_ will be filled with the real values
+which we want to train (digits 0-9)
+for an undefined number of images
+"""</span>
+y_ = tf.placeholder(<span class="hljs-string">"float"</span>, [<span class="hljs-keyword">None</span>,<span class="hljs-number">10</span>])
+
+<span class="hljs-string">"""
+we use the cross_entropy function
+which we want to minimize to improve our model
+"""</span>
+cross_entropy = -tf.reduce_sum(y_*tf.log(y))
+
+<span class="hljs-string">"""
+use a learning rate of 0.01
+to minimize the cross_entropy error
+"""</span>
+train_step = tf.train.GradientDescentOptimizer(<span class="hljs-number">0.01</span>).minimize(cross_entropy)
+
+<span class="hljs-comment"># initialize all variables</span>
+init = tf.initialize_all_variables()
+
+<span class="hljs-comment"># create a session</span>
+sess = tf.Session()
+sess.run(init)
+
+<span class="hljs-comment"># use 1000 batches with a size of 100 each to train our net</span>
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1000</span>):
+  batch_xs, batch_ys = mnist.train.next_batch(<span class="hljs-number">100</span>)
+  <span class="hljs-comment"># run the train_step function with the given image values (x) and the real output (y_)</span>
+  sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+
+<span class="hljs-string">"""
+Let's get the accuracy of our model:
+our model is correct if the index with the highest y value
+is the same as in the real digit vector
+The mean of the correct_prediction gives us the accuracy.
+We need to run the accuracy function
+with our test set (mnist.test)
+We use the keys "images" and "labels" for x and y_
+"""</span>
+correct_prediction = tf.equal(tf.argmax(y,<span class="hljs-number">1</span>), tf.argmax(y_,<span class="hljs-number">1</span>))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, <span class="hljs-string">"float"</span>))
+<span class="hljs-keyword">print</span> sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels})</code></pre>
+<p>This gives us an accuracy of about 91% which is pretty good for a small number of lines. But now we want to use it
+to play with our real data.</p>
+<h2>Preprocessing</h2>
+<p>The most basic approach is to scale all our handwritten digits to a 28x28 pixel image.</p>
+<pre><code class="hljs python"><span class="hljs-comment"># create an array where we can store our 4 pictures</span>
+images = np.zeros((<span class="hljs-number">4</span>,<span class="hljs-number">784</span>))
+<span class="hljs-comment"># and the correct values</span>
+correct_vals = np.zeros((<span class="hljs-number">4</span>,<span class="hljs-number">10</span>))
+
+<span class="hljs-comment"># we want to test our images which you saw at the top of this page</span>
+i = <span class="hljs-number">0</span>
+<span class="hljs-keyword">for</span> no <span class="hljs-keyword">in</span> [<span class="hljs-number">8</span>,<span class="hljs-number">0</span>,<span class="hljs-number">4</span>,<span class="hljs-number">3</span>]:
+    <span class="hljs-comment"># read the image</span>
+    gray = cv2.imread(<span class="hljs-string">"img/blog/own_"</span>+str(no)+<span class="hljs-string">".png"</span>, cv2.CV_LOAD_IMAGE_GRAYSCALE)
+
+    <span class="hljs-comment"># resize the images and invert it (black background)</span>
+    gray = cv2.resize(<span class="hljs-number">255</span>-gray, (<span class="hljs-number">28</span>, <span class="hljs-number">28</span>))
+
+    <span class="hljs-comment"># save the processed images</span>
+    cv2.imwrite(<span class="hljs-string">"pro-img/image_"</span>+str(no)+<span class="hljs-string">".png"</span>, gray)
+    <span class="hljs-string">"""
+    all images in the training set have an range from 0-1
+    and not from 0-255 so we divide our flatten images
+    (a one dimensional vector with our 784 pixels)
+    to use the same 0-1 based range
+    """</span>
+    flatten = gray.flatten() / <span class="hljs-number">255.0</span>
+    <span class="hljs-string">"""
+    we need to store the flatten image and generate
+    the correct_vals array
+    correct_val for the first digit (9) would be
+    [0,0,0,0,0,0,0,0,0,1]
+    """</span>
+    images[i] = flatten
+    correct_val = np.zeros((<span class="hljs-number">10</span>))
+    correct_val[no] = <span class="hljs-number">1</span>
+    correct_vals[i] = correct_val
+    i += <span class="hljs-number">1</span>
+
+<span class="hljs-string">"""
+the prediction will be an array with four values,
+which show the predicted number
+"""</span>
+prediction = tf.argmax(y,<span class="hljs-number">1</span>)
+<span class="hljs-string">"""
+we want to run the prediction and the accuracy function
+using our generated arrays (images and correct_vals)
+"""</span>
+<span class="hljs-keyword">print</span> sess.run(prediction, feed_dict={x: images, y_: correct_vals})
+<span class="hljs-keyword">print</span> sess.run(accuracy, feed_dict={x: images, y_: correct_vals})</code></pre>
+<p>If you run this basic approach you will get an accuracy of 0.25 and a prediction of something like <code>[3 5 2 3]</code>  The
+net will be slightly different anytime you run the script so it can be something different, but yeah it's wrong most
+of the time.</p>
+<p><figure class="image"><img style="" alt="Basic processed handwritten digits 8043" src="./Tensorflow, MNIST and your own handwritten digits_files/basic_8043.png"><figcaption>Basic processed handwritten digits 8043</figcaption></figure></p>
+<p>Okay it's quite obvious that the images doesn't look like the trained ones.
+These are white digits on a gray background and not on a black one.</p>
+<p>Therefore we need to add the following line:</p>
+<pre><code class="hljs">(thresh, gray) = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)</code></pre>
+<p>directly after we resize the image.</p>
+<pre><code class="hljs nginx"><span class="hljs-title">gray</span> = cv2.resize(<span class="hljs-number">255</span>-gray, (<span class="hljs-number">28</span>, <span class="hljs-number">28</span>))</code></pre>
+<p><figure class="image"><img style="" alt="Basic processed handwritten digits black-white 8043" src="./Tensorflow, MNIST and your own handwritten digits_files/basicbw_8043.png"><figcaption>Basic processed handwritten digits black-white 8043</figcaption></figure></p>
+<p>This gives us an accuracy of 50%, because the 0 is pretty good centered.</p>
+<p>Now let's go back to the first sentences of the "MNIST" section in this entry.</p>
+<blockquote>
+<p>All images are size normalized to fit in a 20x20 pixel box and there are centered in a 28x28 image using the
+center of mass. These are important information for our preprocessing.</p>
+</blockquote>
+<p>First we want to fit the images into this 20x20 pixel box.
+Therefore we need to remove every row and column at the sides of the image which are completely black.</p>
+<pre><code class="hljs coffeescript">  <span class="hljs-keyword">while</span> np.sum(gray[<span class="hljs-number">0</span>]) == <span class="hljs-number">0</span>:
+      gray = gray[<span class="hljs-number">1</span>:]
+
+  <span class="hljs-keyword">while</span> np.sum(gray[:,<span class="hljs-number">0</span>]) == <span class="hljs-number">0</span>:
+      gray = np.<span class="hljs-keyword">delete</span>(gray,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>)
+
+  <span class="hljs-keyword">while</span> np.sum(gray[-<span class="hljs-number">1</span>]) == <span class="hljs-number">0</span>:
+      gray = gray[:-<span class="hljs-number">1</span>]
+
+  <span class="hljs-keyword">while</span> np.sum(gray[:,-<span class="hljs-number">1</span>]) == <span class="hljs-number">0</span>:
+      gray = np.<span class="hljs-keyword">delete</span>(gray,-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)
+
+  rows,cols = gray.shape</code></pre>
+<p>Now we resize our outer box to fit it into a 20x20 box.
+Let's calculate the resize factor:</p>
+<pre><code class="hljs css">  <span class="hljs-tag">if</span> <span class="hljs-tag">rows</span> &gt; <span class="hljs-rule"><span class="hljs-attribute">cols</span>:<span class="hljs-value">
+      factor = <span class="hljs-number">20.0</span>/rows
+      rows = <span class="hljs-number">20</span>
+      cols = <span class="hljs-function">int</span>(<span class="hljs-function">round</span>(cols*factor))
+      gray = cv2.<span class="hljs-function">resize</span>(gray, (cols,rows))
+  else:
+      factor = <span class="hljs-number">20.0</span>/cols
+      cols = <span class="hljs-number">20</span>
+      rows = <span class="hljs-function">int</span>(<span class="hljs-function">round</span>(rows*factor))
+      gray = cv2.<span class="hljs-function">resize</span>(gray, (cols, rows))</span></span></code></pre>
+<p>But at the end we need a 28x28 pixel image so we add the missing black rows and columns using the <code>np.lib.pad</code>
+function which adds <code>0</code>s to the sides.</p>
+<pre><code class="hljs java">  colsPadding = (<span class="hljs-keyword">int</span>(math.ceil((<span class="hljs-number">28</span>-cols)/<span class="hljs-number">2.0</span>)),<span class="hljs-keyword">int</span>(math.floor((<span class="hljs-number">28</span>-cols)/<span class="hljs-number">2.0</span>)))
+  rowsPadding = (<span class="hljs-keyword">int</span>(math.ceil((<span class="hljs-number">28</span>-rows)/<span class="hljs-number">2.0</span>)),<span class="hljs-keyword">int</span>(math.floor((<span class="hljs-number">28</span>-rows)/<span class="hljs-number">2.0</span>)))
+  gray = np.lib.pad(gray,(rowsPadding,colsPadding),<span class="hljs-string">'constant'</span>)</code></pre>
+<p>In our really small test set of only four images we are getting an accuracy of 50%.</p>
+<p>The next step is to shift the inner box so that it is centered using the center of mass.</p>
+<p>We need two functions for this last step.
+The first one will get the <code>center_of_mass</code> which is a function in the library ndimage from scipy so we need to
+add <code>from scipy import ndimage</code> at the beginning of our code.</p>
+<pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getBestShift</span><span class="hljs-params">(img)</span>:</span>
+    cy,cx = ndimage.measurements.center_of_mass(img)
+
+    rows,cols = img.shape
+    shiftx = np.round(cols/<span class="hljs-number">2.0</span>-cx).astype(int)
+    shifty = np.round(rows/<span class="hljs-number">2.0</span>-cy).astype(int)
+
+    <span class="hljs-keyword">return</span> shiftx,shifty</code></pre>
+<p>The second functions shifts the image in the given directions.
+The warpAffine function is explained <a href="https://web.archive.org/web/20160804014429/http://docs.opencv.org/master/da/d6e/tutorial_py_geometric_transformations.html#gsc.tab=0">here</a>.</p>
+<p>This is our transformation matrix to shift the image.</p>
+<p><span class="mathjax block"><span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax_Error" id="MathJax-Element-1-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;/web/20160804054823/http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;mi&gt;M&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mrow&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mtable rowspacing=&quot;4pt&quot; columnspacing=&quot;1em&quot;&gt;&lt;mtr&gt;&lt;mtd&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/mtd&gt;&lt;mtd&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mtd&gt;&lt;mtd&gt;&lt;msub&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;/msub&gt;&lt;/mtd&gt;&lt;/mtr&gt;&lt;mtr&gt;&lt;mtd&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mtd&gt;&lt;mtd&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/mtd&gt;&lt;mtd&gt;&lt;msub&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;/msub&gt;&lt;/mtd&gt;&lt;/mtr&gt;&lt;/mtable&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;/math&gt;" role="presentation" style="position: relative;"><span aria-hidden="true">[Math Processing Error]</span><span class="MJX_Assistive_MathML MJX_Assistive_MathML_Block" role="presentation"><math xmlns="/web/20160804054823/http://www.w3.org/1998/Math/MathML" display="block"><mi>M</mi><mo>=</mo><mrow><mo>(</mo><mtable rowspacing="4pt" columnspacing="1em"><mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><msub><mi>s</mi><mi>x</mi></msub></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd><mtd><msub><mi>s</mi><mi>y</mi></msub></mtd></mtr></mtable><mo>)</mo></mrow></math></span></span><script type="math/tex; mode=display" id="MathJax-Element-1">M = \begin{pmatrix} 1 & 0 & s_x \\ 0 & 1 & s_y  \end{pmatrix}</script></span></p>
+<pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">shift</span><span class="hljs-params">(img,sx,sy)</span>:</span>
+    rows,cols = img.shape
+    M = np.float32([[<span class="hljs-number">1</span>,<span class="hljs-number">0</span>,sx],[<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,sy]])
+    shifted = cv2.warpAffine(img,M,(cols,rows))
+    <span class="hljs-keyword">return</span> shifted  </code></pre>
+<p>after our last line in the for loop:
+<code>gray = np.lib.pad(gray,(rowsPadding,colsPadding),'constant')</code>
+we need to add two lines to use the defined functions:</p>
+<pre><code class="hljs makefile">shiftx,shifty = getBestShift(gray)
+<span class="hljs-constant">shifted</span> = shift(gray,shiftx,shifty)
+<span class="hljs-constant">gray</span> = shifted</code></pre>
+<p><figure class="image"><img style="" alt="Final processed handwritten digits 8043" src="./Tensorflow, MNIST and your own handwritten digits_files/pro_8043.png"><figcaption>Final processed handwritten digits 8043</figcaption></figure></p>
+<p>And finally we have a accuracy of 100%. Of course we used a very small test set, but you can see the changes after the preprocessing steps.</p>
+<p>In general it's easier to normalize the data for a neural net, because you will need way less images to train such a
+network.</p>
+<p>You can download all the code on my <a href="https://web.archive.org/web/20160804014429/https://github.com/openmachinesblog/tensorflow-mnist">OpenMachines GitHub repo</a>.</p>
+<h2>Next article</h2>
+<p>You might be interested how to recognize whole numbers anywhere on an image and not only a single digit.
+Enjoy this <a href="https://web.archive.org/web/20160804014429/http://openmachin.es/blog/tensorflow-mnist-nod">blog entry</a>!</p>
+
+          	 <!-- Begin MailChimp Signup Form -->
+        <link href="./Tensorflow, MNIST and your own handwritten digits_files/slim-10_7.css" rel="stylesheet" type="text/css">
+        <style type="text/css">
+            #mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+            /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+               We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+        </style>
+        <div id="mc_embed_signup">
+        <form action="https://web.archive.org/web/20160804014429/http://openmachin.us13.list-manage.com/subscribe/post?u=0a1972325950f4c89581c3c48&amp;id=7abd6f5c4f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate="">
+            <div id="mc_embed_signup_scroll">
+            <label for="mce-EMAIL">Subscribe to our mailing list</label>
+            <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required="">
+            <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+            <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_0a1972325950f4c89581c3c48_7abd6f5c4f" tabindex="-1" value=""></div>
+            <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+            </div>
+        </form>
+        </div>
+
+        <!--End mc_embed_signup-->
+
+		 <div id="jscomments">
+    <div id="disqus_thread"><iframe id="dsq-app1" name="dsq-app1" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" width="100%" src="./Tensorflow, MNIST and your own handwritten digits_files/saved_resource.html" style="width: 1px !important; min-width: 100% !important; border: none !important; overflow: hidden !important; height: 717px !important;" horizontalscrolling="no" verticalscrolling="no"></iframe><iframe id="indicator-north" name="indicator-north" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" style="width: 640px !important; border: none !important; overflow: hidden !important; top: 0px !important; min-width: 640px !important; max-width: 640px !important; position: fixed !important; z-index: 2147483646 !important; height: 29px !important; min-height: 29px !important; max-height: 29px !important; display: none !important;" src="./Tensorflow, MNIST and your own handwritten digits_files/saved_resource(1).html"></iframe><iframe id="indicator-south" name="indicator-south" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" style="width: 640px !important; border: none !important; overflow: hidden !important; bottom: 0px !important; min-width: 640px !important; max-width: 640px !important; position: fixed !important; z-index: 2147483646 !important; height: 29px !important; min-height: 29px !important; max-height: 29px !important; display: none !important;" src="./Tensorflow, MNIST and your own handwritten digits_files/saved_resource(2).html"></iframe></div>
+
+    
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.language = 'en';
+        };
+        var disqus_shortname  = 'openmachines'; // required: replace example with your forum shortname
+        var disqus_title      = 'Tensorflow,\x20MNIST\x20and\x20your\x20own\x20handwritten\x20digits';
+        var disqus_identifier = 'http\x3A\x2F\x2Fopenmachin.es\x2Fblog\x2Ftensorflow\x2Dmnist';
+        var disqus_url        = 'http\x3A\x2F\x2Fopenmachin.es\x2Fblog\x2Ftensorflow\x2Dmnist';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the &lt;a href="/web/20160804014429/http://disqus.com/?ref_noscript"&gt;comments powered by Disqus.&lt;/a&gt;</noscript>
+    <a href="https://web.archive.org/web/20160804014429/http://disqus.com/" class="dsq-brlink">Blog Comments Powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+
+        </section>
+        
+        
+    
+                <footer class="post-footer">
+          <section class="share">
+           <a href="https://web.archive.org/web/20160804014429/https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=B5VQXWCZXYN2W" target="_blank"><img src="./Tensorflow, MNIST and your own handwritten digits_files/btn_donateCC_LG.gif" alt="Donate" title="Donate" border="0"></a>
+                                          <a class="icon-twitter" href="https://web.archive.org/web/20160804014429/http://twitter.com/share?text=%20%20Tensorflow,%20MNIST%20and%20your%20own%20handwritten%20digits%20by%20@Wikunia_de%20http://openmachin.es/blog/tensorflow-mnist%20&amp;url=146826238941d77fb4ffbae86a9b746be900c608ce" onclick="window.open(this.href, &#39;twitter-share&#39;, &#39;width=550,height=255&#39;);return false;">
+                <i class="fa fa-twitter"></i><span class="hidden">twitter</span>
+                </a>
+                                                              </section>
+        </footer>
+        <div class="bottom-teaser cf">
+          <div class="isLeft">
+            <h5 class="index-headline featured"><span>Written by</span></h5>
+            <section class="author">
+              <div class="author-image" style="background-image: url(/web/20160804014429im_/http://openmachin.es/user/images/avatar.jpg)">Blog Logo</div>
+              <h4>Ole Kröger</h4>
+              <p class="bio"></p>
+              <hr>
+              <p class="published">Published <time datetime="17 Nov 2015">17 Nov 2015</time></p>
+            </section>
+          </div>
+                    <div class="isRight">
+            <h5 class="index-headline featured"><span>Supported by</span></h5>
+            <footer class="site-footer">
+              <section class="poweredby">Proudly published with <a href="https://web.archive.org/web/20160804014429/http://getgrav.org/"> Grav</a></section>
+              <a class="subscribe" href="https://web.archive.org/web/20160804014429/http://openmachin.es/blog.rss"> <span class="tooltip"> <i class="fa fa-rss"></i> You should subscribe to my feed.</span></a>
+              <div class="inner">
+                <section class="copyright">All content copyright <a href="https://web.archive.org/web/20160804014429/http://openmachin.es/blog/tensorflow-mnist">Ole Kröger</a> © 2016<br>All rights reserved.</section>
+              </div>
+            </footer>
+          </div>
+        </div>
+        
+      </article>
+    </main>
+    <div class="bottom-closer">
+      <div class="background-closer-image" style="background-image: url(/web/20160804014429im_/http://openmachin.es/images/9/4/e/b/7/94eb7eb722c170f67d9b4ae2096a1a4cc2fc3091-background.jpeg)">
+        Image
+      </div>
+      <div class="inner">
+        <h1 class="blog-title">]OpenMachines[</h1>
+        <h2 class="blog-description">About Brackets, Machine Learning and more</h2>
+        <a href="https://web.archive.org/web/20160804014429/http://openmachin.es/" class="btn">Back to Overview</a>
+      </div>
+    </div>
+    <!-- content end -->
+
+    
+
+<script src="./Tensorflow, MNIST and your own handwritten digits_files/jquery-2.1.4.min.js" type="text/javascript"></script><iframe style="display: none;" src="./Tensorflow, MNIST and your own handwritten digits_files/saved_resource(3).html"></iframe>
+<script src="./Tensorflow, MNIST and your own handwritten digits_files/highlight.pack.js" type="text/javascript"></script>
+<script src="./Tensorflow, MNIST and your own handwritten digits_files/mathjax.js" type="text/javascript"></script>
+<script src="./Tensorflow, MNIST and your own handwritten digits_files/mathjax(1).js" type="text/javascript"></script>
+<script src="./Tensorflow, MNIST and your own handwritten digits_files/jquery.fitvids.js" type="text/javascript"></script>
+<script src="./Tensorflow, MNIST and your own handwritten digits_files/index.js" type="text/javascript"></script>
+<script src="./Tensorflow, MNIST and your own handwritten digits_files/readingTime.min.js" type="text/javascript"></script>
+
+<script>
+$(document).ready(function() {
+                    $('pre code').each(function(i, block) {
+                        hljs.highlightBlock(block);
+                    });
+                 });
+
+</script>
+
+
+<script>
+(function ($) {
+  "use strict";
+  $(document).ready(function(){
+
+    var $window = $(window),
+    $image = $('.post-image-image, .teaserimage-image');
+    $window.on('scroll', function() {
+      var top = $window.scrollTop();
+
+      if (top < 0 || top > 1500) { return; }
+      $image
+        .css('transform', 'translate3d(0px, '+top/3+'px, 0px)')
+        .css('opacity', 1-Math.max(top/700, 0));
+    });
+    $window.trigger('scroll');
+
+    var height = $('.article-image').height();
+    $('.post-content').css('padding-top', height + 'px');
+
+    $('a[href*=#]:not([href=#])').click(function() {
+      if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'')
+       && location.hostname == this.hostname) {
+        var target = $(this.hash);
+        target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+        if (target.length) {
+          $('html,body').animate({ scrollTop: target.offset().top }, 500);
+          return false;
+        }
+      }
+    });
+  });
+}(jQuery));
+</script>
+
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//analytics.wikunia.de/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', 3]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript>&lt;p&gt;&lt;img src="/web/20160804014429im_/http://analytics.wikunia.de/piwik.php?idsite=3" style="border:0;" alt="" /&gt;&lt;/p&gt;</noscript>
+
+
+
+
+
+
+
+<!--
+     FILE ARCHIVED ON 1:44:29 ago 4, 2016 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 15:03:27 nov 2, 2016.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->
+</body></html>
